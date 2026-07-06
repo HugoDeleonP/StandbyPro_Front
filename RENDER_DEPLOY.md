@@ -62,6 +62,25 @@ string do Supabase).
 4. Deploy. Acesse a URL pública do frontend e logue com o ADMIN semeado no
    passo 2.4.
 
+### Fallback para backend local (opcional, útil na apresentação)
+
+`lib/api.ts` tenta `BACKEND_URL` primeiro (timeout de 8s) e, se ele estiver
+fora do ar, cai automaticamente para `BACKEND_URL_FALLBACK` — sem precisar
+trocar variável de ambiente nem redeploy. Só entra em ação quando o backend
+principal está genuinamente inacessível (rede/timeout), não em respostas de
+erro normais (401/403/422 etc.) da API.
+
+Rodando o frontend **localmente** (`npm run dev`), isso já funciona de
+graça: aponte `BACKEND_URL` para o Render e deixe `BACKEND_URL_FALLBACK`
+como `http://localhost:8080` (padrão) — se o Render estiver dormindo/fora
+do ar, seu backend local assume a chamada automaticamente.
+
+Se o **frontend já estiver implantado no Render**, `BACKEND_URL_FALLBACK`
+só é útil apontando para algo que o próprio container do Render alcance —
+"localhost" ali dentro não é o seu laptop. Para ter um backup real durante
+a apresentação, seria necessário expor o backend local publicamente (ex.:
+um túnel como `ngrok`) e usar essa URL como fallback.
+
 ---
 
 ## Opção B — Blueprint (`render.yaml`), um clique por repositório
