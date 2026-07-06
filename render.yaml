@@ -1,0 +1,21 @@
+# Blueprint do Render (https://render.com/docs/blueprint-spec) para o
+# frontend do StandbyPro. Uso: no dashboard do Render, "New" -> "Blueprint",
+# aponte para este repositório. Ver RENDER_DEPLOY.md para o passo a passo
+# completo (inclusive o deploy manual, sem Blueprint).
+#
+# Faça o deploy do backend (standbypro-backend) primeiro - o BACKEND_URL
+# abaixo precisa da URL publica dele.
+
+services:
+  - type: web
+    name: standbypro-frontend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /login
+    envVars:
+      - key: BACKEND_URL
+        sync: false
+      - key: NODE_ENV
+        value: production
